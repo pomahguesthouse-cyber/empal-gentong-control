@@ -14,7 +14,918 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      audit_log: {
+        Row: {
+          action: string
+          after_json: Json | null
+          before_json: Json | null
+          branch_id: string | null
+          created_at: string
+          entity: string | null
+          entity_id: string | null
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          after_json?: Json | null
+          before_json?: Json | null
+          branch_id?: string | null
+          created_at?: string
+          entity?: string | null
+          entity_id?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          after_json?: Json | null
+          before_json?: Json | null
+          branch_id?: string | null
+          created_at?: string
+          entity?: string | null
+          entity_id?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_log_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "audit_log_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      branch_menu: {
+        Row: {
+          branch_id: string
+          is_available: boolean
+          menu_item_id: string
+          price_override: number | null
+        }
+        Insert: {
+          branch_id: string
+          is_available?: boolean
+          menu_item_id: string
+          price_override?: number | null
+        }
+        Update: {
+          branch_id?: string
+          is_available?: boolean
+          menu_item_id?: string
+          price_override?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "branch_menu_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "branch_menu_menu_item_id_fkey"
+            columns: ["menu_item_id"]
+            isOneToOne: false
+            referencedRelation: "menu_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      branches: {
+        Row: {
+          address: string | null
+          code: string
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          phone: string | null
+          receipt_footer: string | null
+          receipt_header: string | null
+          service_charge_rate: number
+          tax_rate: number
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          code: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          phone?: string | null
+          receipt_footer?: string | null
+          receipt_header?: string | null
+          service_charge_rate?: number
+          tax_rate?: number
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          code?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          phone?: string | null
+          receipt_footer?: string | null
+          receipt_header?: string | null
+          service_charge_rate?: number
+          tax_rate?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      categories: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      devices: {
+        Row: {
+          branch_id: string
+          code: string
+          created_at: string
+          id: string
+          last_sync_at: string | null
+          name: string
+        }
+        Insert: {
+          branch_id: string
+          code: string
+          created_at?: string
+          id?: string
+          last_sync_at?: string | null
+          name: string
+        }
+        Update: {
+          branch_id?: string
+          code?: string
+          created_at?: string
+          id?: string
+          last_sync_at?: string | null
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "devices_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      expense_categories: {
+        Row: {
+          id: string
+          name: string
+        }
+        Insert: {
+          id?: string
+          name: string
+        }
+        Update: {
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      expenses: {
+        Row: {
+          amount: number
+          branch_id: string
+          category_id: string | null
+          created_at: string
+          created_by: string | null
+          date: string
+          description: string | null
+          id: string
+          payment_method: string | null
+        }
+        Insert: {
+          amount?: number
+          branch_id: string
+          category_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          date?: string
+          description?: string | null
+          id?: string
+          payment_method?: string | null
+        }
+        Update: {
+          amount?: number
+          branch_id?: string
+          category_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          date?: string
+          description?: string | null
+          id?: string
+          payment_method?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expenses_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "expense_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      item_modifiers: {
+        Row: {
+          menu_item_id: string
+          modifier_group_id: string
+        }
+        Insert: {
+          menu_item_id: string
+          modifier_group_id: string
+        }
+        Update: {
+          menu_item_id?: string
+          modifier_group_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "item_modifiers_menu_item_id_fkey"
+            columns: ["menu_item_id"]
+            isOneToOne: false
+            referencedRelation: "menu_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "item_modifiers_modifier_group_id_fkey"
+            columns: ["modifier_group_id"]
+            isOneToOne: false
+            referencedRelation: "modifier_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      menu_items: {
+        Row: {
+          base_price: number
+          category_id: string | null
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean
+          name: string
+          sku: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          base_price?: number
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          name: string
+          sku?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          base_price?: number
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          name?: string
+          sku?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "menu_items_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      menu_variants: {
+        Row: {
+          id: string
+          is_default: boolean
+          menu_item_id: string
+          name: string
+          price_delta: number
+        }
+        Insert: {
+          id?: string
+          is_default?: boolean
+          menu_item_id: string
+          name: string
+          price_delta?: number
+        }
+        Update: {
+          id?: string
+          is_default?: boolean
+          menu_item_id?: string
+          name?: string
+          price_delta?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "menu_variants_menu_item_id_fkey"
+            columns: ["menu_item_id"]
+            isOneToOne: false
+            referencedRelation: "menu_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      modifier_groups: {
+        Row: {
+          id: string
+          is_required: boolean
+          max_select: number
+          min_select: number
+          name: string
+        }
+        Insert: {
+          id?: string
+          is_required?: boolean
+          max_select?: number
+          min_select?: number
+          name: string
+        }
+        Update: {
+          id?: string
+          is_required?: boolean
+          max_select?: number
+          min_select?: number
+          name?: string
+        }
+        Relationships: []
+      }
+      modifiers: {
+        Row: {
+          group_id: string
+          id: string
+          name: string
+          price_delta: number
+        }
+        Insert: {
+          group_id: string
+          id?: string
+          name: string
+          price_delta?: number
+        }
+        Update: {
+          group_id?: string
+          id?: string
+          name?: string
+          price_delta?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "modifiers_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "modifier_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      order_item_modifiers: {
+        Row: {
+          id: string
+          modifier_id: string | null
+          name_snapshot: string
+          order_item_id: string
+          price_snapshot: number
+        }
+        Insert: {
+          id?: string
+          modifier_id?: string | null
+          name_snapshot: string
+          order_item_id: string
+          price_snapshot?: number
+        }
+        Update: {
+          id?: string
+          modifier_id?: string | null
+          name_snapshot?: string
+          order_item_id?: string
+          price_snapshot?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_item_modifiers_modifier_id_fkey"
+            columns: ["modifier_id"]
+            isOneToOne: false
+            referencedRelation: "modifiers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_item_modifiers_order_item_id_fkey"
+            columns: ["order_item_id"]
+            isOneToOne: false
+            referencedRelation: "order_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      order_items: {
+        Row: {
+          discount: number
+          id: string
+          line_total: number
+          menu_item_id: string | null
+          name_snapshot: string
+          notes: string | null
+          order_id: string
+          qty: number
+          unit_price_snapshot: number
+          variant_id: string | null
+        }
+        Insert: {
+          discount?: number
+          id?: string
+          line_total?: number
+          menu_item_id?: string | null
+          name_snapshot: string
+          notes?: string | null
+          order_id: string
+          qty?: number
+          unit_price_snapshot: number
+          variant_id?: string | null
+        }
+        Update: {
+          discount?: number
+          id?: string
+          line_total?: number
+          menu_item_id?: string | null
+          name_snapshot?: string
+          notes?: string | null
+          order_id?: string
+          qty?: number
+          unit_price_snapshot?: number
+          variant_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_menu_item_id_fkey"
+            columns: ["menu_item_id"]
+            isOneToOne: false
+            referencedRelation: "menu_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "menu_variants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          branch_id: string
+          closed_at: string | null
+          created_at: string
+          created_by: string | null
+          customer_name: string | null
+          device_id: string | null
+          discount_total: number
+          grand_total: number
+          guest_count: number
+          id: string
+          order_no: string
+          order_type: string
+          service_charge_total: number
+          shift_id: string | null
+          status: string
+          subtotal: number
+          table_id: string | null
+          tax_total: number
+          void_reason: string | null
+          voided_at: string | null
+        }
+        Insert: {
+          branch_id: string
+          closed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_name?: string | null
+          device_id?: string | null
+          discount_total?: number
+          grand_total?: number
+          guest_count?: number
+          id?: string
+          order_no: string
+          order_type?: string
+          service_charge_total?: number
+          shift_id?: string | null
+          status?: string
+          subtotal?: number
+          table_id?: string | null
+          tax_total?: number
+          void_reason?: string | null
+          voided_at?: string | null
+        }
+        Update: {
+          branch_id?: string
+          closed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_name?: string | null
+          device_id?: string | null
+          discount_total?: number
+          grand_total?: number
+          guest_count?: number
+          id?: string
+          order_no?: string
+          order_type?: string
+          service_charge_total?: number
+          shift_id?: string | null
+          status?: string
+          subtotal?: number
+          table_id?: string | null
+          tax_total?: number
+          void_reason?: string | null
+          voided_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "devices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_shift_id_fkey"
+            columns: ["shift_id"]
+            isOneToOne: false
+            referencedRelation: "shifts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_table_id_fkey"
+            columns: ["table_id"]
+            isOneToOne: false
+            referencedRelation: "tables"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount: number
+          cash_received: number | null
+          change_given: number | null
+          id: string
+          method: string
+          order_id: string
+          paid_at: string
+          reference_no: string | null
+        }
+        Insert: {
+          amount?: number
+          cash_received?: number | null
+          change_given?: number | null
+          id?: string
+          method: string
+          order_id: string
+          paid_at?: string
+          reference_no?: string | null
+        }
+        Update: {
+          amount?: number
+          cash_received?: number | null
+          change_given?: number | null
+          id?: string
+          method?: string
+          order_id?: string
+          paid_at?: string
+          reference_no?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      promo_branches: {
+        Row: {
+          branch_id: string
+          promo_id: string
+        }
+        Insert: {
+          branch_id: string
+          promo_id: string
+        }
+        Update: {
+          branch_id?: string
+          promo_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "promo_branches_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "promo_branches_promo_id_fkey"
+            columns: ["promo_id"]
+            isOneToOne: false
+            referencedRelation: "promos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      promos: {
+        Row: {
+          active_days: number[]
+          active_hours_end: string | null
+          active_hours_start: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          min_purchase: number
+          name: string
+          type: string
+          valid_from: string | null
+          valid_to: string | null
+          value: number
+        }
+        Insert: {
+          active_days?: number[]
+          active_hours_end?: string | null
+          active_hours_start?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          min_purchase?: number
+          name: string
+          type?: string
+          valid_from?: string | null
+          valid_to?: string | null
+          value?: number
+        }
+        Update: {
+          active_days?: number[]
+          active_hours_end?: string | null
+          active_hours_start?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          min_purchase?: number
+          name?: string
+          type?: string
+          valid_from?: string | null
+          valid_to?: string | null
+          value?: number
+        }
+        Relationships: []
+      }
+      shifts: {
+        Row: {
+          branch_id: string
+          closed_at: string | null
+          closing_cash_counted: number | null
+          closing_cash_expected: number | null
+          device_id: string | null
+          id: string
+          notes: string | null
+          opened_at: string
+          opening_cash: number
+          user_id: string | null
+          variance: number | null
+        }
+        Insert: {
+          branch_id: string
+          closed_at?: string | null
+          closing_cash_counted?: number | null
+          closing_cash_expected?: number | null
+          device_id?: string | null
+          id?: string
+          notes?: string | null
+          opened_at?: string
+          opening_cash?: number
+          user_id?: string | null
+          variance?: number | null
+        }
+        Update: {
+          branch_id?: string
+          closed_at?: string | null
+          closing_cash_counted?: number | null
+          closing_cash_expected?: number | null
+          device_id?: string | null
+          id?: string
+          notes?: string | null
+          opened_at?: string
+          opening_cash?: number
+          user_id?: string | null
+          variance?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shifts_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shifts_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "devices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shifts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tables: {
+        Row: {
+          area: string | null
+          branch_id: string
+          capacity: number
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          area?: string | null
+          branch_id: string
+          capacity?: number
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          area?: string | null
+          branch_id?: string
+          capacity?: number
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tables_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_branches: {
+        Row: {
+          branch_id: string
+          user_id: string
+        }
+        Insert: {
+          branch_id: string
+          user_id: string
+        }
+        Update: {
+          branch_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_branches_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_branches_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          is_active: boolean
+          name: string
+          phone: string | null
+          role: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          phone?: string | null
+          role?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          phone?: string | null
+          role?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
