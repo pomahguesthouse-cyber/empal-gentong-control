@@ -931,7 +931,102 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      report_by_branch: {
+        Args: { p_from: string; p_to: string }
+        Returns: {
+          avg_ticket: number
+          branch_code: string
+          branch_id: string
+          branch_name: string
+          gross: number
+          order_count: number
+          tax: number
+        }[]
+      }
+      report_by_cashier: {
+        Args: { p_branch?: string; p_from: string; p_to: string }
+        Returns: {
+          avg_ticket: number
+          cashier: string
+          gross: number
+          order_count: number
+        }[]
+      }
+      report_by_menu: {
+        Args: { p_branch?: string; p_from: string; p_to: string }
+        Returns: {
+          gross: number
+          name: string
+          qty: number
+        }[]
+      }
+      report_by_payment: {
+        Args: { p_branch?: string; p_from: string; p_to: string }
+        Returns: {
+          method: string
+          total: number
+          trx: number
+        }[]
+      }
+      report_daily: {
+        Args: { p_branch?: string; p_from: string; p_to: string }
+        Returns: {
+          avg_ticket: number
+          day: string
+          gross: number
+          order_count: number
+        }[]
+      }
+      report_expense_by_category: {
+        Args: { p_branch?: string; p_from: string; p_to: string }
+        Returns: {
+          category: string
+          total: number
+        }[]
+      }
+      report_hourly: {
+        Args: { p_branch?: string; p_from: string; p_to: string }
+        Returns: {
+          gross: number
+          hour: number
+          order_count: number
+        }[]
+      }
+      report_pb1: {
+        Args: { p_month: string }
+        Returns: {
+          branch_code: string
+          branch_name: string
+          net_sales: number
+          order_count: number
+          pb1: number
+          tax_rate: number
+        }[]
+      }
+      report_profit_loss: {
+        Args: { p_branch?: string; p_from: string; p_to: string }
+        Returns: {
+          discount: number
+          expense_total: number
+          gross: number
+          net_sales: number
+          profit: number
+          service: number
+          tax: number
+        }[]
+      }
+      report_summary: {
+        Args: { p_branch?: string; p_from: string; p_to: string }
+        Returns: {
+          avg_ticket: number
+          discount: number
+          gross: number
+          net_sales: number
+          order_count: number
+          service: number
+          tax: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
