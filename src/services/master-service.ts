@@ -155,7 +155,7 @@ export const simpanPengguna = async (payload: Partial<AppUser>, branchIds: strin
     lempar(error);
     userId = (data as { id: string }).id;
   }
-  await supabase.from("user_branches").delete().eq("user_id", userId!);
+  await supabase.from("user_branches").delete().eq("user_id", userId as string);
   if (branchIds.length > 0) {
     const { error } = await supabase
       .from("user_branches")
@@ -288,7 +288,7 @@ export const simpanPromo = async (payload: Partial<Promo>, branchIds: string[]):
     lempar(error);
     promoId = (data as { id: string }).id;
   }
-  await supabase.from("promo_branches").delete().eq("promo_id", promoId!);
+  await supabase.from("promo_branches").delete().eq("promo_id", promoId as string);
   if (branchIds.length > 0) {
     const { error } = await supabase
       .from("promo_branches")
