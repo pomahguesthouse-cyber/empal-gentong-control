@@ -1,24 +1,222 @@
+import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { Banknote, Receipt, ShoppingBag, Store } from "lucide-react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+import { DateRangeFilter } from "@/components/common/date-range-filter";
+import { PageHeader } from "@/components/common/page-header";
+import { StatCard } from "@/components/common/stat-card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { formatNumber, formatRupiah, formatRupiahShort, formatTanggal, shiftIsoDate, todayWib } from "@/lib/format";
+import { ambilHarian, ambilPerCabang, ambilPerMenu, ambilRingkasan } from "@/services/report-service";
+import { useBranchStore } from "@/store/branch-store";
+
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "Dashboard Omzet — Admin Empal Gentong" },
+      {
+        name: "description",
+        content:
+          "Pantau omzet harian, jumlah struk, perbandingan antar cabang, dan menu terlaris rumah makan Empal Gentong.",
+      },
+      { property: "og:title", content: "Dashboard Omzet — Admin Empal Gentong" },
+      {
+        property: "og:description",
+        content: "Ringkasan omzet, tren 30 hari, perbandingan cabang, dan menu terlaris dalam satu layar.",
+      },
+    ],
+  }),
+  component: Dashboard,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function Dashboard() {
+  const hariIni = todayWib();
+  const [from, setFrom] = useState(shiftIsoDate(hariIni, -29));
+  const [to, setTo] = useState(hariIni);
+  const { branchId } = useBranchStore();
+
+  const { data: ringkasan } = useQuery({
+    queryKey: ["ringkasan", from, to, branchId],
+    queryFn: () => ambilRingkasan(from, to, branchId),
+  });
+  const { data: ringkasanHariIni } = useQuery({
+    queryKey: ["ringkasan", hariIni, hariIni, branchId],
+    queryFn: () => ambilRingkasan(hariIni, hariIni, branchId),
+  });
+  const kemarin = shiftIsoDate(hariIni, -1);
+  const { data: ringkasanKemarin } = useQuery({
+    queryKey: ["ringkasan", kemarin, kemarin, branchId],
+    queryFn: () => ambilRingkasan(kemarin, kemarin, branchId),
+  });
+  const { data: harian = [] } = useQuery({
+    queryKey: ["harian", from, to, branchId],
+    queryFn: () => ambilHarian(from, to, branchId),
+  });
+  const { data: perCabang = [] } = useQuery({
+    queryKey: ["per-cabang", from, to],
+    queryFn: () => ambilPerCabang(from, to),
+  });
+  const { data: perMenu = [] } = useQuery({
+    queryKey: ["per-menu", from, to, branchId],
+    queryFn: () => ambilPerMenu(from, to, branchId),
+  });
+
+  const deltaOmzet = useMemo(() => {
+    const now = Number(ringkasanHariIni?.gross ?? 0);
+    const prev = Number(ringkasanKemarin?.gross ?? 0);
+    if (prev === 0) return null;
+    return ((now - prev) / prev) * 100;
+  }, [ringkasanHariIni, ringkasanKemarin]);
+
+  const dataGrafik = harian.map((d) => ({ ...d, label: formatTanggal(d.day + "T00:00:00+07:00") }));
+  const menuTerlaris = perMenu.slice(0, 10);
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
+    <div className="space-y-6">
+      <PageHeader
+        title="Dashboard pemilik"
+        description="Ringkasan performa penjualan seluruh cabang dalam rentang tanggal terpilih."
       />
+      <DateRangeFilter
+        from={from}
+        to={to}
+        onChange={(f, t) => {
+          setFrom(f);
+          setTo(t);
+        }}
+      />
+
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <StatCard
+          label="Omzet hari ini"
+          value={formatRupiah(ringkasanHariIni?.gross)}
+          delta={deltaOmzet}
+          sublabel="vs kemarin"
+          icon={Banknote}
+        />
+        <StatCard
+          label="Jumlah struk hari ini"
+          value={formatNumber(ringkasanHariIni?.order_count)}
+          sublabel={`Kemarin ${formatNumber(ringkasanKemarin?.order_count)} struk`}
+          icon={Receipt}
+        />
+        <StatCard
+          label="Rata-rata per struk"
+          value={formatRupiah(ringkasanHariIni?.avg_ticket)}
+          sublabel="Hari ini"
+          icon={ShoppingBag}
+        />
+        <StatCard
+          label="Omzet rentang terpilih"
+          value={formatRupiah(ringkasan?.gross)}
+          sublabel={`${formatNumber(ringkasan?.order_count)} struk · PB1 ${formatRupiah(ringkasan?.tax)}`}
+          icon={Store}
+        />
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Tren omzet harian</CardTitle>
+        </CardHeader>
+        <CardContent className="h-[320px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={dataGrafik} margin={{ left: 8, right: 8 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+              <XAxis dataKey="label" tick={{ fontSize: 11 }} interval="preserveStartEnd" />
+              <YAxis tickFormatter={(v: number) => formatRupiahShort(v)} tick={{ fontSize: 11 }} width={80} />
+              <Tooltip
+                formatter={(v: number) => formatRupiah(v)}
+                labelFormatter={(l: string) => `Tanggal ${l}`}
+                contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8 }}
+              />
+              <Line type="monotone" dataKey="gross" stroke="var(--chart-1)" strokeWidth={2} dot={false} name="Omzet" />
+            </LineChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Perbandingan antar cabang</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="h-[220px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={perCabang} margin={{ left: 8, right: 8 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                  <XAxis dataKey="branch_code" tick={{ fontSize: 11 }} />
+                  <YAxis tickFormatter={(v: number) => formatRupiahShort(v)} tick={{ fontSize: 11 }} width={80} />
+                  <Tooltip
+                    formatter={(v: number) => formatRupiah(v)}
+                    contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8 }}
+                  />
+                  <Bar dataKey="gross" fill="var(--chart-1)" radius={[4, 4, 0, 0]} name="Omzet" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Cabang</TableHead>
+                  <TableHead className="text-right">Omzet</TableHead>
+                  <TableHead className="text-right">Struk</TableHead>
+                  <TableHead className="text-right">Rata-rata</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {perCabang.map((c) => (
+                  <TableRow key={c.branch_id}>
+                    <TableCell className="font-medium">{c.branch_name}</TableCell>
+                    <TableCell className="text-right tabular-nums">{formatRupiah(c.gross)}</TableCell>
+                    <TableCell className="text-right tabular-nums">{formatNumber(c.order_count)}</TableCell>
+                    <TableCell className="text-right tabular-nums">{formatRupiah(c.avg_ticket)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Menu terlaris</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Menu</TableHead>
+                  <TableHead className="text-right">Porsi</TableHead>
+                  <TableHead className="text-right">Omzet</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {menuTerlaris.map((m) => (
+                  <TableRow key={m.name}>
+                    <TableCell className="font-medium">{m.name}</TableCell>
+                    <TableCell className="text-right tabular-nums">{formatNumber(m.qty)}</TableCell>
+                    <TableCell className="text-right tabular-nums">{formatRupiah(m.gross)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
