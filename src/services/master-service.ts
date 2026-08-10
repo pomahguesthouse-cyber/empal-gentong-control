@@ -143,8 +143,8 @@ export const ambilAksesCabang = async (): Promise<{ user_id: string; branch_id: 
 export const simpanPengguna = async (payload: Partial<AppUser>, branchIds: string[]): Promise<void> => {
   let userId = payload.id;
   if (userId) {
-    const { id, ...rest } = payload;
-    const { error } = await supabase.from("users").update(rest).eq("id", id);
+    const { id: _id, ...rest } = payload;
+    const { error } = await supabase.from("users").update(rest).eq("id", userId);
     lempar(error);
   } else {
     const { data, error } = await supabase
@@ -276,8 +276,8 @@ export const ambilPromoCabang = async (): Promise<{ promo_id: string; branch_id:
 export const simpanPromo = async (payload: Partial<Promo>, branchIds: string[]): Promise<void> => {
   let promoId = payload.id;
   if (promoId) {
-    const { id, ...rest } = payload;
-    const { error } = await supabase.from("promos").update(rest).eq("id", id);
+    const { id: _id, ...rest } = payload;
+    const { error } = await supabase.from("promos").update(rest).eq("id", promoId);
     lempar(error);
   } else {
     const { data, error } = await supabase
