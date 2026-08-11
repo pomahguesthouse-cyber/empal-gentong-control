@@ -58,14 +58,13 @@ export function HourlySalesCard({ from, to, branchId }: Props) {
                   <XAxis dataKey="label" tick={{ fontSize: 10 }} interval={1} />
                   <YAxis tickFormatter={(v: number) => formatRupiahShort(v)} tick={{ fontSize: 11 }} width={80} />
                   <Tooltip
-                    formatter={(value: number, name: string) =>
-                      name === "Omzet" ? formatRupiah(value) : `${formatNumber(value)} struk`
+                    formatter={(value: number, _name: string, item: { payload?: { order_count?: number } }) =>
+                      `${formatRupiah(value)} · ${formatNumber(item?.payload?.order_count)} struk`
                     }
                     labelFormatter={(l: string) => `Jam ${l}`}
                     contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8 }}
                   />
                   <Bar dataKey="gross" fill="var(--chart-1)" radius={[4, 4, 0, 0]} name="Omzet" />
-                  <Bar dataKey="order_count" fill="transparent" name="Struk" legendType="none" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
