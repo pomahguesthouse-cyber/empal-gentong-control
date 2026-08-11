@@ -308,6 +308,44 @@ export type Database = {
           },
         ]
       }
+      menu_channel_prices: {
+        Row: {
+          channel: string
+          created_at: string
+          id: string
+          is_active: boolean
+          menu_item_id: string
+          price: number
+          updated_at: string
+        }
+        Insert: {
+          channel: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          menu_item_id: string
+          price: number
+          updated_at?: string
+        }
+        Update: {
+          channel?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          menu_item_id?: string
+          price?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "menu_channel_prices_menu_item_id_fkey"
+            columns: ["menu_item_id"]
+            isOneToOne: false
+            referencedRelation: "menu_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       menu_items: {
         Row: {
           base_price: number
@@ -960,12 +998,31 @@ export type Database = {
           qty: number
         }[]
       }
+      report_by_order_type: {
+        Args: { p_branch?: string; p_from: string; p_to: string }
+        Returns: {
+          avg_ticket: number
+          gross: number
+          order_count: number
+          order_type: string
+        }[]
+      }
       report_by_payment: {
         Args: { p_branch?: string; p_from: string; p_to: string }
         Returns: {
           method: string
           total: number
           trx: number
+        }[]
+      }
+      report_channel_margin: {
+        Args: { p_channel: string }
+        Returns: {
+          base_price: number
+          category: string
+          channel_price: number
+          markup_pct: number
+          name: string
         }[]
       }
       report_daily: {
@@ -990,6 +1047,21 @@ export type Database = {
           gross: number
           hour: number
           order_count: number
+        }[]
+      }
+      report_menu_slow: {
+        Args: {
+          p_branch?: string
+          p_from: string
+          p_limit?: number
+          p_to: string
+        }
+        Returns: {
+          base_price: number
+          category: string
+          gross: number
+          name: string
+          qty: number
         }[]
       }
       report_pb1: {
