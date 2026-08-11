@@ -12,6 +12,8 @@ import {
   ShieldAlert,
 } from "lucide-react";
 
+import { useSesi } from "@/hooks/use-sesi";
+import { AKSES_HALAMAN } from "@/lib/auth";
 import {
   Sidebar,
   SidebarContent,
@@ -52,6 +54,14 @@ const grupMenu = [
 
 export function AppSidebar() {
   const currentPath = useRouterState({ select: (s) => s.location.pathname });
+  const { profil } = useSesi();
+
+  // Menu disaring sesuai peran. Ini hanya kerapian tampilan —
+  // penjaga sebenarnya ada di Gerbang dan di policy RLS database.
+  const diizinkan = profil ? (AKSES_HALAMAN[profil.role] ?? []) : [];
+  const grupTampil = grupMenu
+    .map((grup) => ({ ...grup, items: grup.items.filter((i) => diizinkan.includes(i.url)) }))
+    .filter((grup) => grup.items.length > 0);
 
   return (
     <Sidebar collapsible="icon">
@@ -68,7 +78,7 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
-        {grupMenu.map((grup) => (
+        {grupTampil.map((grup) => (
           <SidebarGroup key={grup.label}>
             <SidebarGroupLabel>{grup.label}</SidebarGroupLabel>
             <SidebarGroupContent>

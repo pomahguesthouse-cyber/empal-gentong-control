@@ -8,8 +8,13 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { Loader2 } from "lucide-react";
 
 import appCss from "../styles.css?url";
+import { Gerbang } from "@/components/auth/gerbang";
+import { HalamanMasuk } from "@/components/auth/halaman-masuk";
+import { MenuPengguna } from "@/components/layout/menu-pengguna";
+import { SesiProvider, useSesi } from "@/hooks/use-sesi";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
@@ -123,24 +128,48 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SidebarProvider>
-        <div className="flex min-h-screen w-full bg-background">
-          <AppSidebar />
-          <div className="flex min-w-0 flex-1 flex-col">
-            <header className="sticky top-0 z-10 flex h-14 items-center gap-3 border-b border-border bg-card/95 px-4 backdrop-blur">
-              <SidebarTrigger />
-              <div className="ml-auto flex items-center gap-3">
-                <BranchSwitcher />
-              </div>
-            </header>
-            <main className="flex-1 p-4 md:p-6">
-              {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-              <Outlet />
-            </main>
-          </div>
-        </div>
-      </SidebarProvider>
+      <SesiProvider>
+        <Cangkang />
+      </SesiProvider>
       <Toaster position="top-right" />
     </QueryClientProvider>
+  );
+}
+
+// Memisahkan cangkang dari RootComponent supaya useSesi berada di dalam SesiProvider.
+function Cangkang() {
+  const { session, memuat } = useSesi();
+
+  if (memuat) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (!session) return <HalamanMasuk />;
+
+  return (
+    <SidebarProvider>
+      <div className="flex min-h-screen w-full bg-background">
+        <AppSidebar />
+        <div className="flex min-w-0 flex-1 flex-col">
+          <header className="sticky top-0 z-10 flex h-14 items-center gap-3 border-b border-border bg-card/95 px-4 backdrop-blur">
+            <SidebarTrigger />
+            <div className="ml-auto flex items-center gap-3">
+              <BranchSwitcher />
+              <MenuPengguna />
+            </div>
+          </header>
+          <main className="flex-1 p-4 md:p-6">
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Gerbang>
+              <Outlet />
+            </Gerbang>
+          </main>
+        </div>
+      </div>
+    </SidebarProvider>
   );
 }
