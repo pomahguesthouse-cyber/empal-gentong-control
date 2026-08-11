@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { PageHeader } from "@/components/common/page-header";
 import { HargaCabangTab } from "@/components/menu/harga-cabang-tab";
+import { HargaOjolTab } from "@/components/menu/harga-ojol-tab";
 import { KatalogTab } from "@/components/menu/katalog-tab";
 import { ModifierTab } from "@/components/menu/modifier-tab";
 import { VarianTab } from "@/components/menu/varian-tab";
@@ -13,7 +14,7 @@ export const Route = createFileRoute("/menu")({
       { title: "Manajemen Menu — Admin Empal Gentong" },
       {
         name: "description",
-        content: "Kelola kategori, menu, varian, modifier, dan harga khusus per cabang.",
+        content: "Kelola kategori, menu, varian, modifier, harga per cabang, dan harga jual di GoFood & GrabFood.",
       },
     ],
   }),
@@ -25,7 +26,7 @@ function HalamanMenu() {
     <div className="space-y-6">
       <PageHeader
         title="Manajemen menu"
-        description="Kategori, menu, varian, modifier, dan harga khusus tiap cabang."
+        description="Kategori, menu, varian, modifier, harga tiap cabang, dan harga jual di GoFood & GrabFood."
       />
       <Tabs defaultValue="katalog">
         <TabsList>
@@ -33,6 +34,7 @@ function HalamanMenu() {
           <TabsTrigger value="varian">Varian</TabsTrigger>
           <TabsTrigger value="modifier">Modifier</TabsTrigger>
           <TabsTrigger value="harga">Harga per cabang</TabsTrigger>
+          <TabsTrigger value="ojol">Harga ojol</TabsTrigger>
         </TabsList>
         <TabsContent value="katalog" className="mt-4">
           <KatalogTab />
@@ -45,6 +47,9 @@ function HalamanMenu() {
         </TabsContent>
         <TabsContent value="harga" className="mt-4">
           <HargaCabangTab />
+        </TabsContent>
+        <TabsContent value="ojol" className="mt-4">
+          <HargaOjolTab />
         </TabsContent>
       </Tabs>
     </div>

@@ -393,3 +393,12 @@ export const simpanHargaChannel = async (
     });
   lempar(error);
 };
+
+export const hapusHargaChannel = async (menuItemId: string, channel: string): Promise<void> => {
+  const { error } = await supabase
+    .from("menu_channel_prices")
+    .delete()
+    .eq("menu_item_id", menuItemId)
+    .eq("channel", channel);
+  lempar(error);
+};
