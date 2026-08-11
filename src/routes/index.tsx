@@ -285,6 +285,24 @@ function Dashboard() {
           </CardContent>
         </Card>
       </div>
+
+      <HourlySalesCard from={from} to={to} branchId={branchId} />
+
+      <OrderTypeCard from={from} to={to} branchId={branchId} />
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <PaymentMethodCard from={from} to={to} branchId={branchId} />
+        <div className="space-y-4">
+          <OjolCommissionCard from={from} to={to} branchId={branchId} />
+          <CashierPerformanceCard from={from} to={to} branchId={branchId} />
+        </div>
+      </div>
+
+      <SlowMenuCard from={from} to={to} branchId={branchId} />
+
+      <ControlCard from={from} to={to} branchId={branchId} />
+
+      <ChannelPriceCard />
     </div>
   );
 }
