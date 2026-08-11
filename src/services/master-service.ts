@@ -356,3 +356,40 @@ export const hapusBiaya = async (id: string): Promise<void> => {
   const { error } = await supabase.from("expenses").delete().eq("id", id);
   lempar(error);
 };
+export const simpanGrupModifier = async (payload: Partial<ModifierGroup>): Promise<void> => {
+  if (payload.id) {
+    const { id, ...rest } = payload;
+    const { error } = await supabase.from("modifier_groups").update(rest).eq("id", id);
+    lempar(error);
+  } else {
+    const { error } = await supabase.from("modifier_groups").insert(payload as never);
+    lempar(error);
+  }
+};
+
+export interface ChannelPrice {
+  id: string;
+  menu_item_id: string;
+  channel: string;
+  price: number;
+  is_active: boolean;
+}
+
+export const ambilHargaChannel = async (): Promise<ChannelPrice[]> => {
+  const { data, error } = await supabase.from("menu_channel_prices").select("*");
+  lempar(error);
+  return (data ?? []) as ChannelPrice[];
+};
+
+export const simpanHargaChannel = async (
+  menuItemId: string,
+  channel: string,
+  price: number,
+): Promise<void> => {
+  const { error } = await supabase
+    .from("menu_channel_prices")
+    .upsert({ menu_item_id: menuItemId, channel, price, is_active: true } as never, {
+      onConflict: "menu_item_id,channel",
+    });
+  lempar(error);
+};
