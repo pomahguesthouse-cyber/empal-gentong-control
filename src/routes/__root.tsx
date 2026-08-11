@@ -155,14 +155,14 @@ function Cangkang() {
       <div className="flex min-h-screen w-full bg-background">
         <AppSidebar />
         <div className="flex min-w-0 flex-1 flex-col">
-          <header className="sticky top-0 z-10 flex h-14 items-center gap-3 border-b border-border bg-card/95 px-4 backdrop-blur">
+          <header className="sticky top-0 z-10 flex h-14 items-center gap-2 border-b border-border bg-card/95 px-3 backdrop-blur sm:gap-3 sm:px-4">
             <SidebarTrigger />
-            <div className="ml-auto flex items-center gap-3">
+            <div className="ml-auto flex min-w-0 items-center gap-2 sm:gap-3">
               <BranchSwitcher />
               <MenuPengguna />
             </div>
           </header>
-          <main className="flex-1 p-4 md:p-6">
+          <main className="flex-1 p-3 sm:p-4 md:p-6">
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
             <Gerbang>
               <Outlet />

@@ -90,7 +90,7 @@ function HalamanLaporanKeuangan() {
       />
 
       <Tabs defaultValue="laba-rugi">
-        <TabsList className="flex-wrap">
+        <TabsList className="h-auto flex-wrap">
           <TabsTrigger value="laba-rugi">Laba rugi</TabsTrigger>
           <TabsTrigger value="pb1">Rekap PB1</TabsTrigger>
           <TabsTrigger value="kas">Arus kas per shift</TabsTrigger>
@@ -189,7 +189,7 @@ function HalamanLaporanKeuangan() {
         <TabsContent value="pb1" className="mt-4 space-y-4">
           <Card>
             <CardContent className="space-y-4 p-4">
-              <div className="flex flex-wrap items-end justify-between gap-3">
+              <div className="grid gap-3 sm:flex sm:flex-wrap sm:items-end sm:justify-between">
                 <div className="grid gap-1">
                   <Label htmlFor="bulan" className="text-xs text-muted-foreground">
                     Masa pajak
@@ -198,7 +198,7 @@ function HalamanLaporanKeuangan() {
                     id="bulan"
                     type="month"
                     value={bulan}
-                    className="w-[180px] bg-card"
+                    className="w-full bg-card sm:w-[180px]"
                     onChange={(e) => setBulan(e.target.value)}
                   />
                 </div>

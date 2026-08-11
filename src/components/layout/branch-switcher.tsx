@@ -13,7 +13,7 @@ export function BranchSwitcher() {
     <div className="flex items-center gap-2">
       <Store className="size-4 text-muted-foreground" />
       <Select value={branchId ?? "semua"} onValueChange={(v) => setBranchId(v === "semua" ? null : v)}>
-        <SelectTrigger className="w-[220px] bg-card">
+        <SelectTrigger className="w-[140px] bg-card sm:w-[220px]">
           <SelectValue placeholder="Pilih cabang" />
         </SelectTrigger>
         <SelectContent>

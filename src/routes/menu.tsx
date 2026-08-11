@@ -29,7 +29,7 @@ function HalamanMenu() {
         description="Kategori, menu, varian, modifier, harga tiap cabang, dan harga jual di GoFood & GrabFood."
       />
       <Tabs defaultValue="katalog">
-        <TabsList>
+        <TabsList className="h-auto flex-wrap">
           <TabsTrigger value="katalog">Kategori &amp; menu</TabsTrigger>
           <TabsTrigger value="varian">Varian</TabsTrigger>
           <TabsTrigger value="modifier">Modifier</TabsTrigger>

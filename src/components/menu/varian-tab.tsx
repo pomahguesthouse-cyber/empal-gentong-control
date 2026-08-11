@@ -73,11 +73,11 @@ export function VarianTab() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-end justify-between gap-3">
+      <div className="grid gap-3 sm:flex sm:flex-wrap sm:items-end sm:justify-between">
         <div className="grid gap-1">
           <Label className="text-xs text-muted-foreground">Pilih menu</Label>
           <Select value={dipilih} onValueChange={setMenuId}>
-            <SelectTrigger className="w-[320px] bg-card">
+            <SelectTrigger className="w-full bg-card sm:w-[320px]">
               <SelectValue placeholder="Pilih menu" />
             </SelectTrigger>
             <SelectContent className="max-h-[320px]">
@@ -169,7 +169,7 @@ export function VarianTab() {
       )}
 
       <Dialog open={terbuka} onOpenChange={setTerbuka}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-md">
           <DialogHeader>
             <DialogTitle>{form.id ? "Edit varian" : "Tambah varian"}</DialogTitle>
           </DialogHeader>

@@ -98,21 +98,21 @@ export function KatalogTab() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div className="flex flex-wrap items-end gap-3">
+      <div className="grid gap-3 sm:flex sm:flex-wrap sm:items-end sm:justify-between">
+        <div className="grid gap-3 sm:flex sm:flex-wrap sm:items-end">
           <div className="grid gap-1">
             <Label className="text-xs text-muted-foreground">Cari menu</Label>
             <Input
               value={cari}
               placeholder="Nama atau SKU"
-              className="w-[240px] bg-card"
+              className="w-full bg-card sm:w-[240px]"
               onChange={(e) => setCari(e.target.value)}
             />
           </div>
           <div className="grid gap-1">
             <Label className="text-xs text-muted-foreground">Kategori</Label>
             <Select value={filterKategori} onValueChange={setFilterKategori}>
-              <SelectTrigger className="w-[220px] bg-card">
+              <SelectTrigger className="w-full bg-card sm:w-[220px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

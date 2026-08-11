@@ -114,20 +114,20 @@ export function HargaOjolTab() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-end gap-3">
+      <div className="grid gap-3 sm:flex sm:flex-wrap sm:items-end">
         <div className="grid gap-1">
           <Label className="text-xs text-muted-foreground">Cari menu</Label>
           <Input
             value={cari}
             placeholder="Nama atau SKU"
-            className="w-[220px] bg-card"
+            className="w-full bg-card sm:w-[220px]"
             onChange={(e) => setCari(e.target.value)}
           />
         </div>
         <div className="grid gap-1">
           <Label className="text-xs text-muted-foreground">Kategori</Label>
           <Select value={filterKategori} onValueChange={setFilterKategori}>
-            <SelectTrigger className="w-[200px] bg-card">
+            <SelectTrigger className="w-full bg-card sm:w-[200px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -143,7 +143,7 @@ export function HargaOjolTab() {
         <div className="grid gap-1">
           <Label className="text-xs text-muted-foreground">Tampilkan</Label>
           <Select value={hanyaTerdaftar} onValueChange={setHanyaTerdaftar}>
-            <SelectTrigger className="w-[190px] bg-card">
+            <SelectTrigger className="w-full bg-card sm:w-[190px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -163,7 +163,7 @@ export function HargaOjolTab() {
             min={0}
             max={90}
             value={komisi}
-            className="w-[120px] bg-card"
+            className="w-full bg-card sm:w-[120px]"
             onChange={(e) => setKomisi(Math.min(90, Math.max(0, Number(e.target.value) || 0)))}
           />
         </div>
@@ -188,11 +188,11 @@ export function HargaOjolTab() {
       ) : terfilter.length === 0 ? (
         <EmptyState>Tidak ada menu yang cocok dengan penyaring ini.</EmptyState>
       ) : (
-        <div className="max-h-[65vh] overflow-auto rounded-md border border-border">
+        <div className="max-h-[65vh] overflow-auto overscroll-contain rounded-md border border-border">
           <table className="w-full caption-bottom text-sm">
             <thead className="sticky top-0 z-20 bg-card">
               <tr className="border-b border-border">
-                <th className="sticky left-0 z-30 min-w-[230px] bg-card px-3 py-2 text-left font-medium">
+                <th className="sticky left-0 z-30 min-w-[150px] bg-card px-3 py-2 text-left font-medium sm:min-w-[230px]">
                   Menu
                 </th>
                 <th className="min-w-[100px] px-3 py-2 text-right font-medium">Harga dasar</th>

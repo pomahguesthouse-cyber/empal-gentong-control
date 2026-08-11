@@ -120,11 +120,11 @@ function HalamanPengguna() {
         }
       />
 
-      <div className="flex flex-wrap items-end gap-3">
+      <div className="grid gap-3 sm:flex sm:flex-wrap sm:items-end">
         <div className="grid gap-1">
           <Label className="text-xs text-muted-foreground">Saring peran</Label>
           <Select value={filterPeran} onValueChange={setFilterPeran}>
-            <SelectTrigger className="w-[200px] bg-card">
+            <SelectTrigger className="w-full bg-card sm:w-[200px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

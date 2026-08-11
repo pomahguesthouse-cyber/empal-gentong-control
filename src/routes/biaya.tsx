@@ -175,7 +175,7 @@ function HalamanBiaya() {
       <div className="grid gap-1">
         <Label className="text-xs text-muted-foreground">Saring kategori</Label>
         <Select value={filterKategori} onValueChange={setFilterKategori}>
-          <SelectTrigger className="w-[240px] bg-card">
+          <SelectTrigger className="w-full bg-card sm:w-[240px]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -259,7 +259,7 @@ function HalamanBiaya() {
       </Card>
 
       <Dialog open={terbuka} onOpenChange={setTerbuka}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>{form.id ? "Edit biaya" : "Catat biaya"}</DialogTitle>
           </DialogHeader>

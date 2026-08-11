@@ -198,7 +198,7 @@ export function ModifierTab() {
       )}
 
       <Dialog open={dialogGrup} onOpenChange={setDialogGrup}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-md">
           <DialogHeader>
             <DialogTitle>{formGrup.id ? "Edit grup modifier" : "Tambah grup modifier"}</DialogTitle>
           </DialogHeader>
@@ -264,7 +264,7 @@ export function ModifierTab() {
       </Dialog>
 
       <Dialog open={dialogMod} onOpenChange={setDialogMod}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-md">
           <DialogHeader>
             <DialogTitle>{formMod.id ? "Edit pilihan" : "Tambah pilihan"}</DialogTitle>
           </DialogHeader>

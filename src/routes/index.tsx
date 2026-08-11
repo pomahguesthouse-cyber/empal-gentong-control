@@ -199,7 +199,7 @@ function Dashboard() {
         <CardHeader>
           <CardTitle>Tren omzet harian</CardTitle>
         </CardHeader>
-        <CardContent className="h-[320px]">
+        <CardContent className="h-[240px] sm:h-[320px]">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={dataGrafik} margin={{ left: 8, right: 8 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
@@ -222,7 +222,7 @@ function Dashboard() {
             <CardTitle>Perbandingan antar cabang</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="h-[220px]">
+            <div className="h-[180px] sm:h-[220px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={perCabang} margin={{ left: 8, right: 8 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />

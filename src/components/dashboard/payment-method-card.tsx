@@ -39,7 +39,7 @@ export function PaymentMethodCard({ from, to, branchId }: Props) {
           <EmptyState>Belum ada pembayaran tercatat pada periode ini.</EmptyState>
         ) : (
           <>
-            <div className="h-[220px]">
+            <div className="h-[180px] sm:h-[220px]">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie

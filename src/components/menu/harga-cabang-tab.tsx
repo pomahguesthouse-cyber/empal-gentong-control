@@ -85,20 +85,20 @@ export function HargaCabangTab() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-end gap-3">
+      <div className="grid gap-3 sm:flex sm:flex-wrap sm:items-end">
         <div className="grid gap-1">
           <Label className="text-xs text-muted-foreground">Cari menu</Label>
           <Input
             value={cari}
             placeholder="Nama atau SKU"
-            className="w-[240px] bg-card"
+            className="w-full bg-card sm:w-[240px]"
             onChange={(e) => setCari(e.target.value)}
           />
         </div>
         <div className="grid gap-1">
           <Label className="text-xs text-muted-foreground">Kategori</Label>
           <Select value={filterKategori} onValueChange={setFilterKategori}>
-            <SelectTrigger className="w-[220px] bg-card">
+            <SelectTrigger className="w-full bg-card sm:w-[220px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -123,11 +123,11 @@ export function HargaCabangTab() {
       ) : terfilter.length === 0 ? (
         <EmptyState>Tidak ada menu yang cocok.</EmptyState>
       ) : (
-        <div className="max-h-[70vh] overflow-auto rounded-md border border-border">
+        <div className="max-h-[70vh] overflow-auto overscroll-contain rounded-md border border-border">
           <table className="w-full caption-bottom text-sm">
             <thead className="sticky top-0 z-20 bg-card">
               <tr className="border-b border-border">
-                <th className="sticky left-0 z-30 min-w-[240px] bg-card px-3 py-2 text-left font-medium">
+                <th className="sticky left-0 z-30 min-w-[150px] bg-card px-3 py-2 text-left font-medium sm:min-w-[240px]">
                   Menu
                 </th>
                 <th className="min-w-[110px] px-3 py-2 text-right font-medium">Harga dasar</th>

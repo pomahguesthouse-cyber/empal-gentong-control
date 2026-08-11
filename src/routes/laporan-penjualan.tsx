@@ -111,7 +111,7 @@ function HalamanLaporanPenjualan() {
       />
 
       <Tabs defaultValue="harian">
-        <TabsList className="flex-wrap">
+        <TabsList className="h-auto flex-wrap">
           <TabsTrigger value="harian">Harian</TabsTrigger>
           <TabsTrigger value="cabang">Per cabang</TabsTrigger>
           <TabsTrigger value="menu">Per menu</TabsTrigger>
@@ -299,11 +299,11 @@ function HalamanLaporanPenjualan() {
                 Pakai grafik ini untuk menentukan jadwal shift dan waktu persiapan dapur.
               </p>
               {perJam.isLoading ? (
-                <ChartSkeleton className="h-[320px]" />
+                <ChartSkeleton className="h-[240px] sm:h-[320px]" />
               ) : dataJam.length === 0 ? (
                 <EmptyState>Tidak ada penjualan pada rentang ini.</EmptyState>
               ) : (
-                <div className="h-[320px]">
+                <div className="h-[240px] sm:h-[320px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={dataJam} margin={{ left: 8, right: 8 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />

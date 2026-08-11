@@ -23,7 +23,7 @@ export function DateRangeFilter({ from, to, onChange }: DateRangeFilterProps) {
   };
 
   return (
-    <div className="flex flex-wrap items-end gap-3">
+    <div className="grid gap-3 sm:flex sm:flex-wrap sm:items-end">
       <div className="grid gap-1">
         <Label htmlFor="dari" className="text-xs text-muted-foreground">
           Dari tanggal
@@ -33,7 +33,7 @@ export function DateRangeFilter({ from, to, onChange }: DateRangeFilterProps) {
           type="date"
           value={from}
           max={to}
-          className="w-[160px] bg-card"
+          className="w-full bg-card sm:w-[160px]"
           onChange={(e) => onChange(e.target.value, to)}
         />
       </div>
@@ -46,11 +46,11 @@ export function DateRangeFilter({ from, to, onChange }: DateRangeFilterProps) {
           type="date"
           value={to}
           min={from}
-          className="w-[160px] bg-card"
+          className="w-full bg-card sm:w-[160px]"
           onChange={(e) => onChange(from, e.target.value)}
         />
       </div>
-      <div className="flex gap-1">
+      <div className="flex flex-wrap gap-1">
         {preset.map((p) => (
           <Button key={p.label} type="button" variant="outline" size="sm" onClick={() => terapkanPreset(p.days)}>
             {p.label}
