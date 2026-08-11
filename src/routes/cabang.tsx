@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus } from "lucide-react";
+import { Info, Plus } from "lucide-react";
 import { toast } from "sonner";
 
 import { PageHeader } from "@/components/common/page-header";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { EmptyState, TableSkeleton } from "@/components/dashboard/dashboard-shared";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -33,6 +34,10 @@ export const Route = createFileRoute("/cabang")({
   }),
   component: HalamanCabang,
 });
+
+// Jumlah cabang dibatasi 3. Pembatas sesungguhnya ada di trigger database
+// (batasi_jumlah_cabang), yang di bawah ini hanya agar tombolnya tidak menyesatkan.
+const BATAS_CABANG = 3;
 
 const kosong: Partial<Branch> = {
   code: "",
@@ -66,7 +71,13 @@ function HalamanCabang() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const penuh = cabang.length >= BATAS_CABANG;
+
   const bukaBaru = () => {
+    if (penuh) {
+      toast.error(`Jumlah cabang dibatasi maksimal ${BATAS_CABANG}`);
+      return;
+    }
     setForm(kosong);
     setTerbuka(true);
   };
@@ -93,12 +104,24 @@ function HalamanCabang() {
         title="Manajemen cabang"
         description="Data cabang, tarif pajak daerah, service charge, dan format struk."
         actions={
-          <Button onClick={bukaBaru}>
+          <Button onClick={bukaBaru} disabled={penuh}>
             <Plus className="size-4" />
             Tambah cabang
           </Button>
         }
       />
+
+      {penuh ? (
+        <Alert>
+          <Info className="size-4" />
+          <AlertTitle>Batas cabang tercapai</AlertTitle>
+          <AlertDescription>
+            Sistem dibatasi maksimal {BATAS_CABANG} cabang dan saat ini sudah terisi semua. Cabang yang
+            ada masih bisa diedit atau dinonaktifkan. Untuk menambah cabang keempat, batas ini perlu
+            diubah lebih dulu di database.
+          </AlertDescription>
+        </Alert>
+      ) : null}
 
       <Card>
         <CardContent className="p-0">
