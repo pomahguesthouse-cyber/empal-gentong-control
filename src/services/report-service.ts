@@ -76,6 +76,29 @@ export interface ExpenseCatRow {
   total: number;
 }
 
+export interface OrderTypeRow {
+  order_type: string;
+  gross: number;
+  order_count: number;
+  avg_ticket: number;
+}
+
+export interface SlowMenuRow {
+  name: string;
+  category: string;
+  base_price: number;
+  qty: number;
+  gross: number;
+}
+
+export interface ChannelMarginRow {
+  name: string;
+  category: string;
+  base_price: number;
+  channel_price: number;
+  markup_pct: number;
+}
+
 type Params = { p_from: string; p_to: string; p_branch?: string | null };
 
 const panggil = async <T>(nama: string, params: Record<string, unknown>): Promise<T[]> => {
@@ -135,6 +158,23 @@ export const ambilBiayaPerKategori = (
   branchId: string | null,
 ): Promise<ExpenseCatRow[]> =>
   panggil<ExpenseCatRow>("report_expense_by_category", buatParams(from, to, branchId));
+
+export const ambilPerTipePesanan = (
+  from: string,
+  to: string,
+  branchId: string | null,
+): Promise<OrderTypeRow[]> => panggil<OrderTypeRow>("report_by_order_type", buatParams(from, to, branchId));
+
+export const ambilMenuLambat = (
+  from: string,
+  to: string,
+  branchId: string | null,
+  limit = 10,
+): Promise<SlowMenuRow[]> =>
+  panggil<SlowMenuRow>("report_menu_slow", { ...buatParams(from, to, branchId), p_limit: limit });
+
+export const ambilMarginChannel = (channel: string): Promise<ChannelMarginRow[]> =>
+  panggil<ChannelMarginRow>("report_channel_margin", { p_channel: channel });
 
 // ==== Kontrol & audit ====
 export interface VoidOrder {
