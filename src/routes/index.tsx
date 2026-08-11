@@ -17,10 +17,24 @@ import {
 import { DateRangeFilter } from "@/components/common/date-range-filter";
 import { PageHeader } from "@/components/common/page-header";
 import { StatCard } from "@/components/common/stat-card";
+import { CashierPerformanceCard } from "@/components/dashboard/cashier-performance-card";
+import { ChannelPriceCard } from "@/components/dashboard/channel-price-card";
+import { ControlCard } from "@/components/dashboard/control-card";
+import { HourlySalesCard } from "@/components/dashboard/hourly-sales-card";
+import { OjolCommissionCard } from "@/components/dashboard/ojol-commission-card";
+import { OrderTypeCard } from "@/components/dashboard/order-type-card";
+import { PaymentMethodCard } from "@/components/dashboard/payment-method-card";
+import { SlowMenuCard } from "@/components/dashboard/slow-menu-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { formatNumber, formatRupiah, formatRupiahShort, formatTanggal, shiftIsoDate, todayWib } from "@/lib/format";
-import { ambilHarian, ambilPerCabang, ambilPerMenu, ambilRingkasan } from "@/services/report-service";
+import {
+  ambilHarian,
+  ambilPerCabang,
+  ambilPerMenu,
+  ambilRingkasan,
+  ambilTransaksiDibatalkan,
+} from "@/services/report-service";
 import { useBranchStore } from "@/store/branch-store";
 
 export const Route = createFileRoute("/")({
@@ -73,6 +87,10 @@ function Dashboard() {
     queryKey: ["per-menu", from, to, branchId],
     queryFn: () => ambilPerMenu(from, to, branchId),
   });
+  const { data: transaksiDibatalkan = [] } = useQuery({
+    queryKey: ["transaksi-dibatalkan", from, to, branchId],
+    queryFn: () => ambilTransaksiDibatalkan(from, to, branchId),
+  });
 
   const deltaOmzet = useMemo(() => {
     const now = Number(ringkasanHariIni?.gross ?? 0);
@@ -83,6 +101,9 @@ function Dashboard() {
 
   const dataGrafik = harian.map((d) => ({ ...d, label: formatTanggal(d.day + "T00:00:00+07:00") }));
   const menuTerlaris = perMenu.slice(0, 10);
+  const omzetBersih =
+    Number(ringkasan?.gross ?? 0) - Number(ringkasan?.tax ?? 0) - Number(ringkasan?.service ?? 0);
+  const nilaiDibatalkan = transaksiDibatalkan.reduce((acc, o) => acc + Number(o.grand_total), 0);
 
   return (
     <div className="space-y-6">
@@ -125,6 +146,53 @@ function Dashboard() {
           sublabel={`${formatNumber(ringkasan?.order_count)} struk · PB1 ${formatRupiah(ringkasan?.tax)}`}
           icon={Store}
         />
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <StatCard
+          label="Omzet bersih"
+          value={formatRupiah(omzetBersih)}
+          sublabel="Omzet dikurangi PB1 & service"
+          icon={Wallet}
+        />
+        <StatCard
+          label="Total diskon diberikan"
+          value={formatRupiah(ringkasan?.discount)}
+          sublabel="Rentang terpilih"
+          icon={TicketPercent}
+        />
+        <StatCard
+          label="Total PB1 terkumpul"
+          value={formatRupiah(ringkasan?.tax)}
+          sublabel="Untuk setoran pajak daerah"
+          icon={Landmark}
+        />
+        <Card
+          className={
+            transaksiDibatalkan.length > 0 ? "border-destructive/50 bg-destructive/5" : "border-border/70"
+          }
+        >
+          <CardContent className="p-5">
+            <div className="flex items-start justify-between gap-3">
+              <p className="text-sm font-medium text-muted-foreground">Transaksi dibatalkan</p>
+              <Ban
+                className={
+                  transaksiDibatalkan.length > 0 ? "size-4 text-destructive" : "size-4 text-muted-foreground"
+                }
+              />
+            </div>
+            <p
+              className={
+                transaksiDibatalkan.length > 0
+                  ? "mt-2 text-2xl font-semibold tabular-nums text-destructive"
+                  : "mt-2 text-2xl font-semibold tabular-nums text-foreground"
+              }
+            >
+              {formatNumber(transaksiDibatalkan.length)} struk
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">Nilai {formatRupiah(nilaiDibatalkan)}</p>
+          </CardContent>
+        </Card>
       </div>
 
       <Card>
