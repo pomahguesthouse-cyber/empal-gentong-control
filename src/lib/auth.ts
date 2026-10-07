@@ -11,7 +11,7 @@ export const usernameKeEmail = (input: string): string => {
 
 export const emailKeUsername = (email: string | null | undefined): string => {
   if (!email) return "-";
-  return email.endsWith(`@${DOMAIN_INTERNAL}`) ? email.split("@")[0] : email;
+  return email.endsWith(`@${DOMAIN_INTERNAL}`) ? (email.split("@")[0] ?? email) : email;
 };
 
 export interface Profil {

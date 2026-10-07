@@ -104,7 +104,7 @@ function HalamanBiaya() {
 
   const bukaBaru = () => {
     setForm({
-      branch_id: branchId ?? cabangAktif[0]?.id,
+      branch_id: branchId ?? cabangAktif[0]?.id ?? "",
       category_id: kategori[0]?.id ?? null,
       date: hariIni,
       amount: 0,
