@@ -78,7 +78,7 @@ function HalamanMeja() {
   });
 
   const bukaBaru = () => {
-    setForm({ branch_id: branchId ?? cabangAktif[0]?.id, name: "", capacity: 4, area: "" });
+    setForm({ branch_id: branchId ?? cabangAktif[0]?.id ?? "", name: "", capacity: 4, area: "" });
     setTerbuka(true);
   };
 
